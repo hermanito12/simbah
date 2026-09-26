@@ -78,7 +78,13 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control" required>
+                                <div class="input-group">
+                                    <input type="password" name="password" id="loginPassword" class="form-control" required>
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword" aria-label="Tampilkan password" aria-pressed="false">
+                                        <svg class="password-eye" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        <svg class="password-eye-off d-none" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a15.8 15.8 0 0 1-3.1 3.9"/><path d="M6.6 6.6C3.6 8.6 2 12 2 12s3.6 7 10 7a10.4 10.4 0 0 0 4.1-.8"/></svg>
+                                    </button>
+                                </div>
                             </div>
                             <div class="mb-3 form-check">
                                 <input type="checkbox" name="remember" class="form-check-input" id="remember">
@@ -86,11 +92,25 @@
                             </div>
                             <button type="submit" class="btn btn-success w-100">Login</button>
                         </form>
+                        <p class="text-center text-muted small mt-3 mb-0">Belum punya akun? Hubungi admin.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        const passwordInput = document.getElementById('loginPassword');
+        const passwordToggle = document.getElementById('togglePassword');
+
+        passwordToggle.addEventListener('click', function() {
+            const isVisible = passwordInput.type === 'text';
+            passwordInput.type = isVisible ? 'password' : 'text';
+            passwordToggle.setAttribute('aria-pressed', String(!isVisible));
+            passwordToggle.setAttribute('aria-label', isVisible ? 'Tampilkan password' : 'Sembunyikan password');
+            passwordToggle.querySelector('.password-eye').classList.toggle('d-none', !isVisible);
+            passwordToggle.querySelector('.password-eye-off').classList.toggle('d-none', isVisible);
+        });
+    </script>
 </body>
 
 </html>

@@ -42,7 +42,7 @@
                     <td>{{ $u->unit->nama_unit ?? '-' }}</td>
                     <td class="text-end">
                         <div class="dropdown">
-                            <button class="btn btn-outline-secondary btn-sm btn-action" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm btn-action dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" data-action-menu aria-expanded="false">
                                 Aksi
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">

@@ -42,12 +42,21 @@
                         </span>
                     </td>
                     <td class="text-end">
-                        <a href="{{ route('admin.jenis-sampah.edit', $j) }}" class="btn btn-outline-primary btn-sm">Edit</a>
-                        <form action="{{ route('admin.jenis-sampah.destroy', $j) }}" method="POST" class="d-inline" onsubmit="return confirm('Nonaktifkan jenis sampah ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-outline-danger btn-sm">Nonaktifkan</button>
-                        </form>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm btn-action dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" data-action-menu aria-expanded="false">
+                                Aksi
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ route('admin.jenis-sampah.edit', $j) }}">Edit</a></li>
+                                <li>
+                                    <form action="{{ route('admin.jenis-sampah.destroy', $j) }}" method="POST" onsubmit="return confirm('Nonaktifkan jenis sampah ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item text-danger">Nonaktifkan</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
                 @empty

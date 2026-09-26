@@ -150,6 +150,19 @@
             padding: 0.35rem;
         }
 
+        .dropdown-menu-floating {
+            position: fixed !important;
+            top: var(--action-menu-top) !important;
+            right: auto !important;
+            bottom: auto !important;
+            left: var(--action-menu-left) !important;
+            z-index: 1080;
+            max-height: calc(100vh - 1rem);
+            overflow-y: auto;
+            margin: 0 !important;
+            transform: none !important;
+        }
+
         .dropdown-item {
             border-radius: 4px;
             padding: 0.55rem 0.75rem;
@@ -163,6 +176,20 @@
 
         .btn-action {
             min-width: 78px;
+            border-color: #cbd8ce;
+            background: #fff;
+            color: var(--simba-ink);
+            box-shadow: 0 1px 3px rgba(36, 53, 45, 0.1);
+            transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+        }
+
+        .btn-action:hover,
+        .btn-action:focus-visible,
+        .show > .btn-action {
+            border-color: #8eae99;
+            background: #edf5ef;
+            color: var(--simba-ink);
+            box-shadow: 0 3px 9px rgba(36, 53, 45, 0.16);
         }
 
         .badge {
@@ -252,6 +279,60 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let activeActionToggle = null;
+
+        function positionActionMenu(toggle) {
+            const menu = toggle.parentElement.querySelector('.dropdown-menu');
+            if (!menu) return;
+
+            const bounds = toggle.getBoundingClientRect();
+            const menuBounds = menu.getBoundingClientRect();
+            const gap = 6;
+            const margin = 8;
+            const left = Math.max(margin, Math.min(bounds.right - menuBounds.width, window.innerWidth - menuBounds.width - margin));
+            const belowTop = bounds.bottom + gap;
+            const top = belowTop + menuBounds.height <= window.innerHeight - margin
+                ? belowTop
+                : Math.max(margin, bounds.top - menuBounds.height - gap);
+
+            menu.style.setProperty('--action-menu-left', `${left}px`);
+            menu.style.setProperty('--action-menu-top', `${top}px`);
+        }
+
+        document.addEventListener('shown.bs.dropdown', function(event) {
+            const toggle = event.target;
+            if (!toggle.matches('[data-action-menu]')) return;
+
+            const menu = toggle.parentElement.querySelector('.dropdown-menu');
+            menu.classList.add('dropdown-menu-floating');
+            menu.style.setProperty('--action-menu-left', '0px');
+            menu.style.setProperty('--action-menu-top', '0px');
+            activeActionToggle = toggle;
+            requestAnimationFrame(function() {
+                positionActionMenu(toggle);
+            });
+        });
+
+        document.addEventListener('hidden.bs.dropdown', function(event) {
+            const toggle = event.target;
+            if (!toggle.matches('[data-action-menu]')) return;
+
+            const menu = toggle.parentElement.querySelector('.dropdown-menu');
+            menu.classList.remove('dropdown-menu-floating');
+            menu.style.removeProperty('--action-menu-left');
+            menu.style.removeProperty('--action-menu-top');
+            if (activeActionToggle === toggle) activeActionToggle = null;
+        });
+
+        document.addEventListener('scroll', function() {
+            if (activeActionToggle) positionActionMenu(activeActionToggle);
+        }, true);
+
+        window.addEventListener('resize', function() {
+            if (activeActionToggle) positionActionMenu(activeActionToggle);
+        });
+    </script>
 </body>
 
 </html>
